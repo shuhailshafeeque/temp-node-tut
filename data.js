@@ -6,7 +6,7 @@
 
 
 
-const datas=[
+const datas1=[
     {
       "id": "rec6d6T3q5EBIdCfD",
       "name": "Best of Paris in 7 Days Tour",
@@ -45,8 +45,13 @@ const datas=[
   ]
 
 
+const datas=[
+    {id:1, name:'bob'}
+    ,{id:2,name:'jack'}
+    ,{id:3,name:'john'}
+    ,{id:4,name:'rose'}
+]
 
 
 
-
-module.exports={datas}
+module.exports=datas

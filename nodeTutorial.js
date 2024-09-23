@@ -228,21 +228,120 @@
 
 
 ////////////////////////////////////////////////////////////////////////////////
-
-const express=require('express')
-const app=express()
-
-const products=require('./data').datas
+// url queries 
 
 
-app.get('/products/:productID',(request,response)=>{
-    const reqProduct=products.find((product)=>product.id===request.params.productID)        //params gives string. so for integers, use Number()
+// const express=require('express')
+// const { datas } = require('./data')
+// const app=express()
 
-    if(!reqProduct){
-        response.status(404).send('Product doesn\'t exist')
+// const products=require('./data').datas
+
+
+// app.get('/products/:productID',(request,response)=>{
+//     const reqProduct=products.find((product)=>product.id===request.params.productID)        //params gives string. so for integers, use Number()
+
+//     let sortedProducts=[...products]
+
+//     if(!reqProduct){
+//         return response.status(404).send('Product doesn\'t exist')
+//     }
+//     const queries=request.query
+
+//     if(queries.search){
+//         sortedProducts=sortedProducts.filter((product)=>{
+//             return product.name.startsWith(queries.search)})
+//     }
+//     if(queries.limit){
+//         sortedProducts=sortedProducts.slice(0,Number(queries.limit))
+//     }
+
+//     response.status(200).json(sortedProducts)
+// })
+
+// app.listen(5000)
+
+////////////////////////////////////////////////////////////////////////////////////
+// express middleware
+
+
+// const express=require('express')
+// const app=express()
+// const authorize=require('./authorization')
+
+// const logger=(req,res,next)=>{
+//     const method=req.method
+//     const url=req.url
+//     const time=new Date().getFullYear()
+//     console.log(method, url, time)
+//     next()
+    
+// }
+
+// app.use('/api',[logger, authorize])
+
+
+// app.get('/',(req,res)=>{
+//     res.send('Home')
+//     // console.log(req.user)
+// })
+
+// app.get('/api/about',(req,res)=>{
+//     res.send('Home')
+//     console.log(req.user)
+// })
+
+// app.listen(5000,()=>{console.log('listening to port 5000...')})
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+//POST Method
+
+const express = require("express");
+const app = express();
+
+const datas = require("./data");
+console.clear();
+
+app.use(express.static("./nav-bar"));
+// app.use(express.urlencoded({extended:false}))            //mostly for html forms for post method so that we get the data
+app.use(express.json()); //Mostly used in For API Requests to payload or give result data in json
+
+// console.log(datas)
+app.listen(5000, () => {
+  console.log("listening to port 5000....");
+});
+
+// app.get('/entrance',(req,res)=>{
+//     res.status(200).json({success:true,datas})
+// })
+
+app.post("/entrance/:id", (req, res) => {
+  const { name } = req.body;
+  if (!name) {
+    return res.status(400).json({ success: false });
+  }
+  res.status(201).json({ success: true, name: name });
+});
+
+
+app.put("/entrance/:id", (req, res) => {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const person=datas.find((person)=>person.id===Number(id))
+
+    if (!person) {
+      return res.status(404).json({ success: false, msg:`no person with id ${id}` });
     }
 
-    response.json(reqProduct)
-})
+    const newPeople=datas.map((person)=>{
+        if (person.id===Number(id)) {
+            person.name=name            
+        }
+        return person
+    })
 
-app.listen(5000)
+    console.log(newPeople)
+    res.status(200).json({success:true,data: newPeople})
+
+});
