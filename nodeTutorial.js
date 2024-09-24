@@ -296,52 +296,70 @@
 /////////////////////////////////////////////////////////////////////////////////////////////
 //POST Method
 
-const express = require("express");
-const app = express();
+// const express = require("express");
+// const app = express();
 
-const datas = require("./data");
-console.clear();
+// const datas = require("./data");
+// console.clear();
 
-app.use(express.static("./nav-bar"));
-// app.use(express.urlencoded({extended:false}))            //mostly for html forms for post method so that we get the data
-app.use(express.json()); //Mostly used in For API Requests to payload or give result data in json
+// app.use(express.static("./nav-bar"));
+// // app.use(express.urlencoded({extended:false}))            //mostly for html forms for post method so that we get the data
+// app.use(express.json()); //Mostly used in For API Requests to payload or give result data in json
 
-// console.log(datas)
-app.listen(5000, () => {
-  console.log("listening to port 5000....");
-});
+// // console.log(datas)
+// app.listen(5000, () => {
+//   console.log("listening to port 5000....");
+// });
+
+
 
 // app.get('/entrance',(req,res)=>{
 //     res.status(200).json({success:true,datas})
 // })
 
-app.post("/entrance/:id", (req, res) => {
-  const { name } = req.body;
-  if (!name) {
-    return res.status(400).json({ success: false });
-  }
-  res.status(201).json({ success: true, name: name });
-});
+// app.post("/entrance/:id", (req, res) => {
+//   const { name } = req.body;
+//   if (!name) {
+//     return res.status(400).json({ success: false });
+//   }
+//   res.status(201).json({ success: true, name: name });
+// });
 
 
-app.put("/entrance/:id", (req, res) => {
-    const { id } = req.params;
-    const { name } = req.body;
+// app.put("/entrance/:id", (req, res) => {
+//     const { id } = req.params;
+//     const { name } = req.body;
 
-    const person=datas.find((person)=>person.id===Number(id))
+//     const person=datas.find((person)=>person.id===Number(id))
 
-    if (!person) {
-      return res.status(404).json({ success: false, msg:`no person with id ${id}` });
-    }
+//     if (!person) {
+//       return res.status(404).json({ success: false, msg:`no person with id ${id}` });
+//     }
 
-    const newPeople=datas.map((person)=>{
-        if (person.id===Number(id)) {
-            person.name=name            
-        }
-        return person
-    })
+//     const newPeople=datas.map((person)=>{
+//         if (person.id===Number(id)) {
+//             person.name=name            
+//         }
+//         return person
+//     })
 
-    console.log(newPeople)
-    res.status(200).json({success:true,data: newPeople})
+//     console.log(newPeople)
+//     res.status(200).json({success:true,data: newPeople})
 
-});
+// });
+
+///////////////////////////////////////////////////////////////////////////////////////
+
+const express=require('express')
+// const routerApp=express.Router()
+const app=express()
+const router=require('./routerFiles')
+
+app.use(express.json())
+app.use('/about/users',router)
+
+// routerApp.get('/',(req,res)=>{
+//     res.status(200).send("Welcome")
+// })
+
+app.listen(5000)
